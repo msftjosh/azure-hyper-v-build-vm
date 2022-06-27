@@ -1,7 +1,7 @@
 #Check if Azure CLI is installed if so skip to next
 if($null -ne (Get-WmiObject -Class Win32_Product | Where-Object name -like "*Azure CLI*"))
 {
-    Write-Host "DHCP Server installation already complete"
+    Write-Host "Azure CLI installation already complete"
 } else {
     $ProgressPreference = 'SilentlyContinue'
     Invoke-WebRequest -Uri https://aka.ms/installazurecliwindows -OutFile .\AzureCLI.msi
@@ -30,7 +30,7 @@ if($null -ne (Get-DhcpServerv4Scope -ScopeId 192.168.250.0))
     Write-Host "vm-builds DHCP scope exists"
 } else {
     #Retrieve upstream DNS Server IP address(es)
-    $hostDnsServers = Get-DnsClientServerAddress | Where-Object {$_.InterfaceAlias -eq "vEthernet (Microsoft Hyper-V Network Adapter - Virtual Switch)" -and $_.AddressFamily -eq 2} | Select-Object -ExpandProperty ServerAddresses
+    $hostDnsServers = Get-DnsClientServerAddress | Where-Object {$_.InterfaceAlias -eq "Ethernet" -and $_.AddressFamily -eq 2} | Select-Object -ExpandProperty ServerAddresses
 
     #Configure a DHCP Scope with Scope Options for Default Gateway and DNS
     Add-DhcpServerv4Scope -name "vm-builds" -StartRange 192.168.250.50 -EndRange 192.168.250.100 -SubnetMask 255.255.255.0 -State Active
